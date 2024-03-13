@@ -1,15 +1,11 @@
 <!--
- * @Descripttion : 
+ * @Descripttion : peaks.js-音频波形demo
  * @Author       : wuhaidong
  * @Date         : 2024-03-10 20:24:22
  * @LastEditors  : wuhaidong
- * @LastEditTime : 2024-03-11 17:05:42
+ * @LastEditTime : 2024-03-13 10:31:14
 -->
 <template>
-  <!-- <div>
-    <audio :src="audioUrl" controls></audio>
-    <div ref="peaksContainer" id="zoomview-container"></div>
-  </div> -->
   <div id="peak-container">
     <div id="zoomview-container" ref="zoomview"></div>
     <div id="overview-container" ref="overview"></div>
@@ -47,7 +43,6 @@ export default {
     const peaksInstance = Peaks.init(options, (err, peaks) => {
       console.log("🚀 ~ Peaks.init ~ peaks:", peaks);
       if (err) return;
-      
     });
 
     peaksInstance.on("zoom", (zoomData) => {
@@ -57,27 +52,6 @@ export default {
     peaksInstance.on("select", (start, end) => {
       console.log("Selected region:", start, end);
     });
-
-    //   const zoomview = this.$refs.zoomview;
-    //   const overview = this.$refs.overview;
-    // const peaksInstance = Peaks.init({
-    //   containers: {
-    //     zoomview,
-    //     overview
-    //   },
-    //   mediaElement: this.$el.querySelector('audio'),
-    //   webAudio: {
-    //     audioContext: new (window.AudioContext || window.webkitAudioContext)()
-    //   }
-    // });
-
-    // peaksInstance.on('zoom', (zoomData) => {
-    //   console.log('Zoom data:', zoomData);
-    // });
-
-    // peaksInstance.on('select', (start, end) => {
-    //   console.log('Selected region:', start, end);
-    // });
   },
 };
 </script>
