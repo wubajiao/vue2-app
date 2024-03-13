@@ -1,19 +1,41 @@
+<!--
+ * @Descripttion : 
+ * @Author       : wuhaidong
+ * @Date         : 2024-03-10 20:17:10
+ * @LastEditors  : wuhaidong
+ * @LastEditTime : 2024-03-10 20:52:32
+-->
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <img alt="Vue logo" src="./assets/logo.png" />
+    <HelloWorld msg="Welcome to Your Vue.js App" /> -->
+    <!-- <div>
+      <audio controls :src="audioUrl"></audio>
+      <div id="zoomview-container"></div>
+      <div id="overview-container"></div>
+      <AudioWaveform />
+    </div> -->
+    <AudioWaveform />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import HelloWorld from "./components/HelloWorld.vue";
+import AudioWaveform from "./components/AudioWaveform.vue";
+import yinyue from "./assets/aa.mp3";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    // HelloWorld,
+    AudioWaveform,
+  },
+  data() {
+    return {
+      audioUrl: yinyue,
+    };
+  },
+};
 </script>
 
 <style>
@@ -24,5 +46,10 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+#zoomview-container,
+#overview-container {
+  width: 1000px;
+  height: 100px;
 }
 </style>
