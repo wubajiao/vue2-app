@@ -3,7 +3,7 @@
  * @Author       : wuhaidong
  * @Date         : 2024-03-10 20:17:10
  * @LastEditors  : wuhaidong
- * @LastEditTime : 2024-03-10 20:52:32
+ * @LastEditTime : 2024-03-27 15:27:23
 -->
 <template>
   <div id="app">
@@ -15,20 +15,24 @@
       <div id="overview-container"></div>
       <AudioWaveform />
     </div> -->
-    <AudioWaveform />
+    <!-- <AudioWaveform /> -->
+    <ElCharts />
+
   </div>
 </template>
 
 <script>
 // import HelloWorld from "./components/HelloWorld.vue";
-import AudioWaveform from "./components/AudioWaveform.vue";
+// import AudioWaveform from "./components/AudioWaveform.vue";
+import ElCharts from "./components/ELCharts1.vue";
 import yinyue from "./assets/aa.mp3";
 
 export default {
   name: "App",
   components: {
     // HelloWorld,
-    AudioWaveform,
+    // AudioWaveform,
+    ElCharts,
   },
   data() {
     return {
