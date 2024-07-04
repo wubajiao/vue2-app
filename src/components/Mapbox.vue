@@ -22,8 +22,8 @@
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
-import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-// import * as turf from '@turf/turf';
+import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
+import * as turf from "@turf/turf";
 import MapboxWorker from "worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker"; // Load worker code separately with worker-loader
 mapboxgl.workerClass = MapboxWorker; // Wire up loaded worker to be used instead of the default
 mapboxgl.accessToken =
@@ -329,14 +329,10 @@ export default {
             },
           ],
         }, // mapbox底图
-        center: [121.25994, 31.376757], // 初始化中心点 北京
+        center: [121.25994, 31.376757], // 初始化中心点
         zoom: 11, // 初始化层级
-        // projection: "globe",
         language: "zh-Hans",
         accessToken: mapboxgl.accessToken,
-        // pitch: 65,
-        // bearing: -180,
-        // interactive: false,
       });
       this.map = map;
       map.on("load", (e) => {
@@ -360,6 +356,8 @@ export default {
 
         // 绘制-点线面
         this.autoDrawCircle();
+
+        // this.drawCustomCircle();
       });
     },
 
@@ -372,6 +370,9 @@ export default {
     autoDrawCircle() {
       const draw = new MapboxDraw({
         displayControlsDefault: false,
+        circle: {
+          radiusUnits: "meters", // 圆形半径单位
+        },
         controls: {
           polygon: true,
           point: true,
@@ -388,10 +389,51 @@ export default {
       this.map.on("draw.update", updateArea);
 
       function updateArea(e) {
-        console.log("🚀 ~ updateArea ~ e:", e)
+        console.log("🚀 ~ updateArea ~ e:", e);
         const data = draw.getAll();
-        console.log("🚀 ~ 绘制的数据:", data)
+        console.log("🚀 ~ 绘制的数据:", data);
+        // var feature = e.features[0];
+        // draw.changeMode('direct_select', { featureId: feature.id });
       }
+    },
+
+    // 绘制圆
+    drawCustomCircle() {
+      var that = this;
+      var centerPoint = null;
+      // var circleLayer = null;
+      this.map.on("click", function (e) {
+        var lngLat = e.lngLat;
+
+        if (centerPoint) {
+          that.map.removeLayer("circleLayer");
+          that.map.removeSource("circleSource");
+          centerPoint = null;
+        }
+
+        centerPoint = turf.point([lngLat.lng, lngLat.lat]);
+        var options = {
+          steps: 64,
+          units: "kilometers",
+        };
+        var circle = turf.circle(centerPoint, 5, options); // 以指定半径（单位为公里）创建圆形
+
+        that.map.addSource("circleSource", {
+          type: "geojson",
+          data: circle,
+        });
+
+        that.map.addLayer({
+          id: "circleLayer",
+          type: "fill",
+          source: "circleSource",
+          layout: {},
+          paint: {
+            "fill-color": "#f00",
+            "fill-opacity": 0.5,
+          },
+        });
+      });
     },
 
     // 画圆  createGeoJSONCircle参数（[经度，纬度]，圆的半径单位km）
@@ -447,8 +489,6 @@ export default {
           "fill-opacity": 0.6,
         },
       });
-
-      
     },
     // 绘制矩形的逻辑
     drawRectangle() {
